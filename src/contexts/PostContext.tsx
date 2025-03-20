@@ -8,6 +8,7 @@ type PostContextType = {
     posts: Post[];
     addPost: (title: string, body: string) => void;
     removePost: (id: number) => void;
+    editPost: (id: number, newTitle: string, newBody: string) => void;
 }
 
 export const PostContext = createContext<PostContextType | null>(null);
@@ -44,8 +45,17 @@ export const PostProvider = ( {children}: Props) => {
         })
     }
 
+    const editPost = (id: number, newTitle: string, newBody: string) => {
+        dispatch({
+            type: 'edit',
+            payload: {
+                id, newTitle, newBody
+            }
+        })
+    }
+
     return(
-        <PostContext.Provider value={ {posts, addPost, removePost} }>
+        <PostContext.Provider value={ {posts, addPost, removePost, editPost} }>
             {children}
         </PostContext.Provider>
     );

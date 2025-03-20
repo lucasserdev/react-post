@@ -1,4 +1,5 @@
 import { Post } from "@/types/Post";
+import { title } from "process";
 
 type AddPostAction = {
     type: 'add';
@@ -15,7 +16,16 @@ type removePostAction = {
     }
 }
 
-type postActions = AddPostAction | removePostAction;
+type EditPostAction = {
+    type: 'edit';
+    payload: {
+        id: number,
+        newTitle: string,
+        newBody: string
+    }
+}
+
+type postActions = AddPostAction | removePostAction | EditPostAction;
 
 export const PostReducer = (post: Post[], action: postActions) => {
     switch(action.type) {
@@ -27,6 +37,13 @@ export const PostReducer = (post: Post[], action: postActions) => {
             }];
         case 'remove':
             return post.filter(item => item.id !== action.payload.id);
+        case 'edit': 
+            return post.map(item => {
+                if(item.id === action.payload.id) {
+                   return {...item, title: action.payload.newTitle, body: action.payload.newBody }
+                }
+                return item;
+            })
         default:
             return post;
     }
